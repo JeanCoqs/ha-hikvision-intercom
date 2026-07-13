@@ -9,8 +9,20 @@ from homeassistant.const import (
     CONF_PASSWORD,
     CONF_USERNAME,
 )
+from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
+from .const import (
+    CONF_PORT,
+    DEFAULT_PORT,
+    DOMAIN,
+)
+
+
+async def validate_input(
+    hass: HomeAssistant,
+    data: dict,
+) -> None:
+    """Validate the user input."""
 
 
 class HikvisionIntercomConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -30,6 +42,7 @@ class HikvisionIntercomConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         schema = vol.Schema(
             {
                 vol.Required(CONF_HOST): str,
+                vol.Required(CONF_PORT, default=DEFAULT_PORT): int,
                 vol.Required(CONF_USERNAME): str,
                 vol.Required(CONF_PASSWORD): str,
             }
