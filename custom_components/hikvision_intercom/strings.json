@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Hikvision Intercom",
+        "description": "Enter the connection details for your Hikvision intercom.",
+        "data": {
+          "host": "Host",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    }
+  }
+}
