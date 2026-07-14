@@ -18,6 +18,10 @@ from .const import (
     DOMAIN,
 )
 
+PLATFORMS = [
+    "button",
+]
+
 type HikvisionConfigEntry = ConfigEntry
 
 
@@ -40,6 +44,11 @@ async def async_setup_entry(
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = api
 
+    await hass.config_entries.async_forward_entry_setups(
+        entry,
+        PLATFORMS,
+    )
+
     return True
 
 
@@ -49,6 +58,12 @@ async def async_unload_entry(
 ) -> bool:
     """Unload a config entry."""
 
-    hass.data[DOMAIN].pop(entry.entry_id, None)
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry,
+        PLATFORMS,
+    )
 
-    return True
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id, None)
+
+    return unload_ok

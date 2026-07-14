@@ -68,12 +68,34 @@ class HikvisionClient:
 
         return response.text
 
+    #
+    # ------------------------------------------------------------------
+    # HTTP verbs
+    # ------------------------------------------------------------------
+    #
+
     async def get(self, path: str) -> str:
         """Execute a GET request."""
 
         return await self._request(
             "GET",
             path,
+        )
+
+    async def post(
+        self,
+        path: str,
+        body: str,
+        *,
+        content_type: str = "application/json",
+    ) -> str:
+        """Execute a POST request."""
+
+        return await self._request(
+            "POST",
+            path,
+            body=body,
+            content_type=content_type,
         )
 
     async def put(
@@ -90,4 +112,12 @@ class HikvisionClient:
             path,
             body=body,
             content_type=content_type,
+        )
+
+    async def delete(self, path: str) -> str:
+        """Execute a DELETE request."""
+
+        return await self._request(
+            "DELETE",
+            path,
         )
