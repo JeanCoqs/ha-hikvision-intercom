@@ -46,5 +46,5 @@ class HikvisionAPI:
 
         return await self._client.put(
             "/ISAPI/VideoIntercom/callSignal?format=json",
-            json.dumps(payload),
+            body=json.dumps(payload),
         )

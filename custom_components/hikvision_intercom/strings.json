@@ -3,13 +3,22 @@
     "step": {
       "user": {
         "title": "Connect to Hikvision Intercom",
-        "description": "Enter the connection details for your Hikvision intercom.",
+        "description": "Enter the connection parameters.",
         "data": {
           "host": "Host",
+          "port": "Port",
           "username": "Username",
           "password": "Password"
         }
       }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the device.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
     }
   }
 }

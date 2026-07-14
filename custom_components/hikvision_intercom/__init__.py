@@ -3,6 +3,11 @@
 from __future__ import annotations
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import (
+    CONF_HOST,
+    CONF_PASSWORD,
+    CONF_USERNAME,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.httpx_client import get_async_client
 
@@ -22,14 +27,12 @@ async def async_setup_entry(
 ) -> bool:
     """Set up Hikvision Intercom from a config entry."""
 
-    http_client = get_async_client(hass)
-
     client = HikvisionClient(
-        client=http_client,
-        host=entry.data["host"],
+        client=get_async_client(hass),
+        host=entry.data[CONF_HOST],
         port=entry.data[CONF_PORT],
-        username=entry.data["username"],
-        password=entry.data["password"],
+        username=entry.data[CONF_USERNAME],
+        password=entry.data[CONF_PASSWORD],
     )
 
     api = HikvisionAPI(client)
@@ -46,6 +49,6 @@ async def async_unload_entry(
 ) -> bool:
     """Unload a config entry."""
 
-    hass.data[DOMAIN].pop(entry.entry_id)
+    hass.data[DOMAIN].pop(entry.entry_id, None)
 
     return True

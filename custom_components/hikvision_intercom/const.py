@@ -9,3 +9,5 @@ DEFAULT_PORT = 80
 CONF_PORT = "port"
 
 MANUFACTURER = "Hikvision"
+
+DEFAULT_NAME = "Hikvision Intercom"
