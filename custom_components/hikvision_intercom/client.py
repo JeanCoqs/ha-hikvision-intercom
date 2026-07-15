@@ -32,6 +32,26 @@ class HikvisionClient:
         self._base_url = f"http://{host}:{port}"
         self._auth = httpx.DigestAuth(username, password)
         self._timeout = timeout
+        self._host = host
+        self._port = port
+        self._username = username
+        self._password = password
+
+    @property
+    def host(self) -> str:
+        return self._host
+
+    @property
+    def port(self) -> int:
+        return self._port
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def password(self) -> str:
+        return self._password
 
     async def _request(
         self,
@@ -48,7 +68,11 @@ class HikvisionClient:
                 response = await self._client.request(
                     method,
                     f"{self._base_url}{path}",
-                    auth=self._auth,
+                    # auth=self._auth,
+                    auth=httpx.DigestAuth(
+                        self._username,
+                        self._password,
+                    ),
                     content=body,
                     headers={
                         "Content-Type": content_type,

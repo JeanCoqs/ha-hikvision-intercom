@@ -19,7 +19,9 @@ from .const import (
 )
 
 PLATFORMS = [
+    "binary_sensor",
     "button",
+    "camera",
 ]
 
 type HikvisionConfigEntry = ConfigEntry

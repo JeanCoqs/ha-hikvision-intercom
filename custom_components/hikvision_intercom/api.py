@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 import json
+import logging
 
 from .client import HikvisionClient
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class HikvisionAPI:
@@ -36,7 +39,6 @@ class HikvisionAPI:
     # Video Intercom
     # ------------------------------------------------------------------
     #
-
     async def get_call_status(self) -> str:
         """Return current call status."""
 
@@ -147,3 +149,45 @@ class HikvisionAPI:
         """Open notification alert stream."""
 
         return await self._client.get("/ISAPI/Event/notificationAlertStream")
+
+    async def get_key_config(
+        self,
+        key: int = 1,
+    ) -> str:
+        """Return key configuration."""
+
+        return await self._client.get(f"/ISAPI/VideoIntercom/keyCfg/{key}")
+
+    async def reboot(self) -> str:
+        """Reboot the device."""
+
+        return await self._client.put(
+            "/ISAPI/System/reboot",
+            body="",
+            content_type="application/xml",
+        )
+
+    async def get_audio_output(self) -> str:
+        """Return audio output configuration."""
+
+        return await self._client.get("/ISAPI/System/Audio/AudioOut/channels/1")
+
+    async def get_io_capabilities(self) -> str:
+        """Return IO capabilities."""
+
+        return await self._client.get("/ISAPI/System/IO/capabilities")
+
+    async def get_output_status(
+        self,
+        output: int = 1,
+    ) -> str:
+        """Return output status."""
+
+        return await self._client.get(f"/ISAPI/System/IO/outputs/{output}")
+
+    async def get_backlight(self) -> str:
+        """Return backlight configuration."""
+
+        return await self._client.get(
+            "/ISAPI/VideoIntercom/SubModuleBacklight?format=json"
+        )
