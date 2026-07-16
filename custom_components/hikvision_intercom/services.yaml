@@ -1,0 +1,37 @@
+isapi_request:
+  name: ISAPI Explorer
+  description: Execute a raw ISAPI request.
+
+  fields:
+
+    method:
+      name: HTTP Method
+      description: GET, PUT or POST
+      required: true
+      default: GET
+      selector:
+        select:
+          options:
+            - GET
+            - PUT
+            - POST
+
+    endpoint:
+      name: Endpoint
+      description: Example /ISAPI/System/deviceInfo
+      required: true
+      selector:
+        text:
+
+    body:
+      name: Request Body
+      required: false
+      selector:
+        text:
+
+    save:
+      name: Save response to file
+      required: false
+      default: true
+      selector:
+        boolean:

@@ -12,6 +12,7 @@ from .api import HikvisionAPI
 from .const import DOMAIN
 
 
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -28,6 +29,7 @@ async def async_setup_entry(
                 entry,
                 door=1,
             ),
+
         ]
     )
 

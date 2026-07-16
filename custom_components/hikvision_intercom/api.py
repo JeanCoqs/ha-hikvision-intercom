@@ -34,6 +34,37 @@ class HikvisionAPI:
 
         return await self._client.get("/ISAPI/System/deviceInfo")
 
+    async def request(
+        self,
+        method: str,
+        endpoint: str,
+        body: str | None = None,
+    ) -> str:
+        """Execute a raw ISAPI request."""
+
+        method = method.upper()
+
+        if method == "GET":
+            return await self._client.get(endpoint)
+
+        if method == "PUT":
+            return await self._client.put(
+                endpoint,
+                body=body or "",
+                content_type="application/xml",
+            )
+
+        if method == "POST":
+            return await self._client.post(
+                endpoint,
+                body=body or "",
+                content_type="application/json",
+            )
+
+        raise ValueError(f"Unsupported method: {method}")
+
+
+
     #
     # ------------------------------------------------------------------
     # Video Intercom

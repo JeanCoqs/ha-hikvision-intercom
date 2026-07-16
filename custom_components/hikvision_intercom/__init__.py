@@ -10,14 +10,14 @@ from homeassistant.const import (
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.httpx_client import get_async_client
-
+# from .event_listener import HikvisionEventListener
 from .api import HikvisionAPI
 from .client import HikvisionClient
 from .const import (
     CONF_PORT,
     DOMAIN,
 )
-
+from .services import async_register_services
 PLATFORMS = [
     "binary_sensor",
     "button",
@@ -50,6 +50,21 @@ async def async_setup_entry(
         entry,
         PLATFORMS,
     )
+    if not hass.services.has_service(
+        DOMAIN,
+        "debug_request",
+    ):
+        await async_register_services(hass)
+        
+#    listener = HikvisionEventListener(
+#        host=entry.data[CONF_HOST],
+#        username=entry.data[CONF_USERNAME],
+#        password=entry.data[CONF_PASSWORD],
+#    )#
+#
+#    await listener.start()
+#
+#    hass.data[DOMAIN][f"{entry.entry_id}_listener"] = listener
 
     return True
 
@@ -68,4 +83,14 @@ async def async_unload_entry(
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id, None)
 
+    listener = hass.data[DOMAIN].pop(
+        f"{entry.entry_id}_listener",
+        None,
+    )
+
+    if listener:
+        await listener.stop()
+
     return unload_ok
+
+
