@@ -106,6 +106,33 @@ class HikvisionClient:
             path,
         )
 
+    async def get_bytes(self, path: str) -> bytes:
+        """Execute a GET request returning raw bytes."""
+
+        try:
+            async with asyncio.timeout(self._timeout):
+                response = await self._client.request(
+                    "GET",
+                    f"{self._base_url}{path}",
+                    auth=httpx.DigestAuth(
+                        self._username,
+                        self._password,
+                    ),
+                )
+
+        except (httpx.RequestError, TimeoutError) as err:
+            raise HikvisionConnectionError from err
+
+        if response.status_code in (401, 403):
+            raise HikvisionAuthenticationError
+
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as err:
+            raise HikvisionConnectionError from err
+
+        return response.content
+
     async def post(
         self,
         path: str,

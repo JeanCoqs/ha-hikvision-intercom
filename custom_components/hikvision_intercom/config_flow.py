@@ -19,7 +19,9 @@ from homeassistant.helpers.httpx_client import get_async_client
 from .api import HikvisionAPI
 from .client import HikvisionClient
 from .const import (
+    CONF_CALL_STATE_POLL,
     CONF_PORT,
+    DEFAULT_CALL_STATE_POLL,
     DEFAULT_NAME,
     DEFAULT_PORT,
     DOMAIN,
@@ -122,6 +124,13 @@ class HikvisionIntercomConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     ): int,
                     vol.Required(CONF_USERNAME): str,
                     vol.Required(CONF_PASSWORD): str,
+                    vol.Optional(
+                        CONF_CALL_STATE_POLL,
+                        default=DEFAULT_CALL_STATE_POLL,
+                    ): vol.All(
+                        vol.Coerce(int),
+                        vol.Range(min=1, max=10),
+                    ),
                 }
             ),
             errors=errors,

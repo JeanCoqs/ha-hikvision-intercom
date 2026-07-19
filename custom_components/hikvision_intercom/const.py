@@ -11,3 +11,7 @@ CONF_PORT = "port"
 MANUFACTURER = "Hikvision"
 
 DEFAULT_NAME = "Hikvision Intercom"
+
+CONF_CALL_STATE_POLL = "call_state_poll"
+
+DEFAULT_CALL_STATE_POLL = 2

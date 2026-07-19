@@ -136,7 +136,7 @@ class HikvisionAPI:
 
     #
     # ------------------------------------------------------------------
-    # Streaming
+    # Streaming & snapshot
     # ------------------------------------------------------------------
     #
 
@@ -147,6 +147,16 @@ class HikvisionAPI:
         """Return streaming channel configuration."""
 
         return await self._client.get(f"/ISAPI/Streaming/channels/{channel}")
+
+    async def get_snapshot(
+        self,
+        channel: int = 101,
+    ) -> bytes:
+        """Return a JPEG snapshot."""
+
+        return await self._client.get_bytes(
+            f"/ISAPI/Streaming/channels/{channel}/picture"
+        )
 
     #
     # ------------------------------------------------------------------

@@ -17,7 +17,11 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.event import async_track_time_interval
 
 from .api import HikvisionAPI
-from .const import DOMAIN
+from .const import (
+    CONF_CALL_STATE_POLL,
+    DEFAULT_CALL_STATE_POLL,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -56,6 +60,10 @@ class HikvisionRingingBinarySensor(BinarySensorEntity):
 
         self._api = api
         self._entry = entry
+        self._poll_interval = entry.data.get(
+            CONF_CALL_STATE_POLL,
+            DEFAULT_CALL_STATE_POLL,
+        )
 
         self._attr_name = "Call"
         self._attr_unique_id = f"{entry.entry_id}_call"
@@ -87,7 +95,7 @@ class HikvisionRingingBinarySensor(BinarySensorEntity):
             async_track_time_interval(
                 self.hass,
                 _poll,
-                timedelta(seconds=2),
+                timedelta(seconds=self._poll_interval),
             )
         )
 

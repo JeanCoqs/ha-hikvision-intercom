@@ -12,6 +12,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
+from .api import HikvisionAPI
 from .const import DOMAIN
 
 
@@ -22,9 +23,11 @@ async def async_setup_entry(
 ) -> None:
     """Set up Hikvision camera."""
 
+    api: HikvisionAPI = hass.data[DOMAIN][entry.entry_id]
+
     async_add_entities(
         [
-            HikvisionCamera(entry),
+            HikvisionCamera(api, entry),
         ]
     )
 
@@ -36,12 +39,14 @@ class HikvisionCamera(Camera):
 
     def __init__(
         self,
+        api: HikvisionAPI,
         entry: ConfigEntry,
     ) -> None:
         """Initialize camera."""
 
         super().__init__()
 
+        self._api = api
         self._entry = entry
 
         self._attr_name = "Camera"
@@ -70,6 +75,11 @@ class HikvisionCamera(Camera):
         password = self._entry.data[CONF_PASSWORD]
 
         return f"rtsp://{username}:{password}@{host}:554/Streaming/Channels/101"
+
+    async def async_camera_image(self, width=None, height=None):
+        """Return camera snapshot."""
+
+        return await self._api.get_snapshot()
 
     @property
     def supported_features(self) -> CameraEntityFeature:
