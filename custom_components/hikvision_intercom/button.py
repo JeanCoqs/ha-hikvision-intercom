@@ -29,7 +29,14 @@ async def async_setup_entry(
                 entry,
                 door=1,
             ),
-
+            HikvisionRejectCallButton(
+                api,
+                entry,
+            ),
+            HikvisionHangupCallButton(
+                api,
+                entry,
+            ),
         ]
     )
 
@@ -75,3 +82,79 @@ class HikvisionUnlockDoorButton(ButtonEntity):
         await self._api.unlock_door(
             door=self._door,
         )
+
+class HikvisionRejectCallButton(ButtonEntity):
+    """Reject call button."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        api: HikvisionAPI,
+        entry: ConfigEntry,
+    ) -> None:
+        """Initialize button."""
+
+        self._api = api
+        self._entry = entry
+
+        self._attr_name = "Reject Call"
+        self._attr_unique_id = f"{entry.entry_id}_reject_call"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information."""
+
+        return DeviceInfo(
+            identifiers={
+                (
+                    DOMAIN,
+                    self._entry.entry_id,
+                )
+            },
+            name=self._entry.title,
+            manufacturer="Hikvision",
+        )
+
+    async def async_press(self) -> None:
+        """Reject the current call."""
+
+        await self._api.reject_call()
+
+class HikvisionHangupCallButton(ButtonEntity):
+    """Hangup call button."""
+
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        api: HikvisionAPI,
+        entry: ConfigEntry,
+    ) -> None:
+        """Initialize button."""
+
+        self._api = api
+        self._entry = entry
+
+        self._attr_name = "Hangup Call"
+        self._attr_unique_id = f"{entry.entry_id}_hangup_call"
+
+    @property
+    def device_info(self) -> DeviceInfo:
+        """Return device information."""
+
+        return DeviceInfo(
+            identifiers={
+                (
+                    DOMAIN,
+                    self._entry.entry_id,
+                )
+            },
+            name=self._entry.title,
+            manufacturer="Hikvision",
+        )
+
+    async def async_press(self) -> None:
+        """Hang up the current call."""
+
+        await self._api.hangup_call()
