@@ -63,8 +63,6 @@ class HikvisionAPI:
 
         raise ValueError(f"Unsupported method: {method}")
 
-
-
     #
     # ------------------------------------------------------------------
     # Video Intercom
@@ -107,7 +105,7 @@ class HikvisionAPI:
     async def hangup_call(self) -> str:
         """Hang up the current call."""
 
-        return await self._call_signal("hangup")
+        return await self._call_signal("cancel")
 
     #
     # ------------------------------------------------------------------

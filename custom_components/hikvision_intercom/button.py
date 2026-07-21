@@ -12,7 +12,6 @@ from .api import HikvisionAPI
 from .const import DOMAIN
 
 
-
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -83,6 +82,7 @@ class HikvisionUnlockDoorButton(ButtonEntity):
             door=self._door,
         )
 
+
 class HikvisionRejectCallButton(ButtonEntity):
     """Reject call button."""
 
@@ -120,6 +120,7 @@ class HikvisionRejectCallButton(ButtonEntity):
         """Reject the current call."""
 
         await self._api.reject_call()
+
 
 class HikvisionHangupCallButton(ButtonEntity):
     """Hangup call button."""
